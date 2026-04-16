@@ -3,31 +3,39 @@
     <div class="header-inner">
       <div class="logo-group">
         <el-icon class="ico-logo" :size="30">
-          <Notebook />
+          <Notebook/>
         </el-icon>
         <span class="title">书海拾贝</span>
       </div>
 
       <ul class="nav-list">
-        <li><RouterLink to="/">首页</RouterLink></li>
-        <li><RouterLink to="/reviews">书评</RouterLink></li>
-        <li><RouterLink to="/booklists">书单</RouterLink></li>
-        <li><RouterLink to="/stats">统计</RouterLink></li>
+        <li>
+          <RouterLink to="/">首页</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/reviews">书评</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/booklists">书单</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/stats">统计</RouterLink>
+        </li>
       </ul>
 
       <div class="right-actions">
         <div class="search-wrapper">
           <el-icon class="icon-inside" @click="handleSubmit">
-            <Search />
+            <Search/>
           </el-icon>
 
           <input
-            ref="searchInputRef"
-            v-model="localQuery"
-            type="text"
-            class="search-input"
-            placeholder="搜索书籍、作者或标签..."
-            @keyup.enter="handleSubmit"
+              ref="searchInputRef"
+              v-model="localQuery"
+              type="text"
+              class="search-input"
+              placeholder="搜索书籍、作者或标签..."
+              @keyup.enter="handleSubmit"
           />
         </div>
 
@@ -38,8 +46,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { Notebook, Search } from '@element-plus/icons-vue'
+import {ref, watch} from 'vue'
+import {Notebook, Search} from '@element-plus/icons-vue'
 
 const props = defineProps<{
   searchQuery: string
@@ -53,10 +61,10 @@ const localQuery = ref(props.searchQuery)
 const searchInputRef = ref<HTMLInputElement | null>(null)
 
 watch(
-  () => props.searchQuery,
-  (value) => {
-    localQuery.value = value
-  },
+    () => props.searchQuery,
+    (value) => {
+      localQuery.value = value
+    },
 )
 
 const handleSubmit = () => {

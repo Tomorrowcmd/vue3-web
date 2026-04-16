@@ -1,8 +1,8 @@
 ﻿<template>
-  <AppHeader :search-query="searchQuery" @submit="handleSearch" />
+  <AppHeader :search-query="searchQuery" @submit="handleSearch"/>
 
   <main class="main-content">
-    <HeroSection :stats="stats" :featured-books="featuredBooks" />
+    <HeroSection :stats="stats" :featured-books="featuredBooks"/>
 
     <section class="content-shell">
       <div class="content-layout">
@@ -17,37 +17,38 @@
           </div>
 
           <div class="book-list">
-            <BookCard v-for="book in filteredBooks" :key="book.id" :book="book" />
+            <BookCard v-for="book in filteredBooks" :key="book.id" :book="book"/>
           </div>
         </section>
 
         <ReviewSidebar
-          :categories="categories"
-          :tags="popularTags"
-          :selected-category="selectedCategory"
-          :selected-tag="selectedTag"
-          :total="bookList.length"
-          :monthly-stats="monthlyStats"
-          @select-category="handleCategorySelect"
-          @select-tag="handleTagSelect"
+            :categories="categories"
+            :tags="popularTags"
+            :selected-category="selectedCategory"
+            :selected-tag="selectedTag"
+            :total="bookList.length"
+            :monthly-stats="monthlyStats"
+            @select-category="handleCategorySelect"
+            @select-tag="handleTagSelect"
         />
       </div>
     </section>
   </main>
 
-  <AppFooter />
+  <AppFooter/>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
-import { storeToRefs } from 'pinia'
+import {computed, onMounted, onUnmounted, reactive, ref} from 'vue'
+import {storeToRefs} from 'pinia'
 
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import HeroSection from '@/components/home/HeroSection.vue'
 import ReviewSidebar from '@/components/home/ReviewSidebar.vue'
 import BookCard from '@/components/books/BookCard.vue'
-import { useBookListStore, type BookCardItem } from '@/stores/bookListStore'
+import {useBookListStore} from '@/stores/bookListStore'
+import type {BookCardItem} from '@/types/book'
 
 interface StatData {
   bookCount: number
@@ -56,8 +57,8 @@ interface StatData {
 }
 
 const bookListStore = useBookListStore()
-const { bookList, totalBooks, categories, featuredBooks, popularTags, monthlyStats } =
-  storeToRefs(bookListStore)
+const {bookList, totalBooks, categories, featuredBooks, popularTags, monthlyStats} =
+    storeToRefs(bookListStore)
 
 const searchQuery = ref('')
 const selectedCategory = ref('全部')
@@ -78,8 +79,8 @@ const matchesSearch = (book: BookCardItem) => {
   }
 
   const searchTarget = [book.title, book.category, book.intro, ...book.tags]
-    .join(' ')
-    .toLowerCase()
+      .join(' ')
+      .toLowerCase()
 
   return searchTarget.includes(keyword)
 }
@@ -88,7 +89,7 @@ const filteredBooks = computed(() => {
   return bookList.value.filter((book) => {
     const matchesKeyword = matchesSearch(book)
     const matchesCategory =
-      selectedCategory.value === '全部' || book.category === selectedCategory.value
+        selectedCategory.value === '全部' || book.category === selectedCategory.value
     const matchesTag = !selectedTag.value || book.tags.includes(selectedTag.value)
 
     return matchesKeyword && matchesCategory && matchesTag
@@ -128,13 +129,20 @@ const handleTagSelect = (value: string) => {
   selectedTag.value = selectedTag.value === value ? '' : value
 }
 
-onMounted(() => {
-  window.setTimeout(() => {
-    animateNumber('bookCount', totalBooks.value)
-    animateNumber('articleCount', 92)
-    animateNumber('listCount', 30)
-  }, 200)
+onMounted(async () => {
+  // 1. 先异步获取数据
+  await bookListStore.fetchAllData()
+
+  // 2. 数据回来后，再执行动画
+  // 此时 totalBooks 已经是后端返回的真实数量了
+  startAnimate()
 })
+
+const startAnimate = () => {
+  animateNumber('bookCount', totalBooks.value)
+  animateNumber('articleCount', 92)
+  animateNumber('listCount', 30)
+}
 
 onUnmounted(() => {
   timers.forEach((timer) => window.clearInterval(timer))
@@ -143,9 +151,8 @@ onUnmounted(() => {
 
 <style scoped>
 .main-content {
-  background:
-    radial-gradient(circle at top, rgba(224, 206, 182, 0.18), transparent 34%),
-    linear-gradient(180deg, #fbf7f2 0%, #f8f3ed 100%);
+  background: radial-gradient(circle at top, rgba(224, 206, 182, 0.18), transparent 34%),
+  linear-gradient(180deg, #fbf7f2 0%, #f8f3ed 100%);
 }
 
 .content-shell {

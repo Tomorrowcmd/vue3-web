@@ -7,22 +7,22 @@
       </div>
 
       <button
-        type="button"
-        class="category-button"
-        :class="{ active: selectedCategory === '全部' }"
-        @click="$emit('select-category', '全部')"
+          type="button"
+          class="category-button"
+          :class="{ active: selectedCategory === '全部' }"
+          @click="$emit('select-category', '全部')"
       >
         <span>全部</span>
         <strong>{{ total }}</strong>
       </button>
 
       <button
-        v-for="item in categories"
-        :key="item.name"
-        type="button"
-        class="category-button ghost"
-        :class="{ active: selectedCategory === item.name }"
-        @click="$emit('select-category', item.name)"
+          v-for="item in categories"
+          :key="item.name"
+          type="button"
+          class="category-button ghost"
+          :class="{ active: selectedCategory === item.name }"
+          @click="$emit('select-category', item.name)"
       >
         <span>{{ item.name }}</span>
         <strong>{{ item.count }}</strong>
@@ -37,12 +37,12 @@
 
       <div class="tag-cloud">
         <button
-          v-for="tag in tags"
-          :key="tag.name"
-          type="button"
-          class="tag-chip"
-          :class="{ active: selectedTag === tag.name }"
-          @click="$emit('select-tag', tag.name)"
+            v-for="tag in tags"
+            :key="tag.name"
+            type="button"
+            class="tag-chip"
+            :class="{ active: selectedTag === tag.name }"
+            @click="$emit('select-tag', tag.name)"
         >
           #{{ tag.name }}
         </button>
@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MonthlyReadingStats } from '@/stores/bookListStore'
+import type { MonthlyReadingStats } from '@/types/book'
 
 defineProps<{
   categories: Array<{ name: string; count: number }>

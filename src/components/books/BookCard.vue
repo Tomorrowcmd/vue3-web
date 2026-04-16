@@ -34,8 +34,8 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import type {BookCardItem} from "@/types/book.ts";
 
-import type { BookCardItem } from '@/stores/bookListStore'
 
 defineProps<{
   book: BookCardItem

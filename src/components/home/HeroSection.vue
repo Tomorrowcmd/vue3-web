@@ -34,7 +34,7 @@
       <div class="hero-visual">
         <div class="visual-stack">
           <article v-for="book in featuredBooks" :key="book.id" class="visual-card">
-            <img :src="book.cover" :alt="book.title" />
+            <img :src="book.cover" :alt="book.title"/>
             <div class="visual-info">
               <span class="visual-category">{{ book.category }}</span>
               <h3>{{ book.title }}</h3>
@@ -47,9 +47,9 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import {RouterLink} from 'vue-router'
+import type {BookCardItem} from "@/types/book.ts";
 
-import type { BookCardItem } from '@/stores/bookListStore'
 
 defineProps<{
   stats: {
@@ -85,14 +85,13 @@ defineProps<{
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
+  background: linear-gradient(
       90deg,
       rgba(255, 249, 242, 0.96) 0%,
       rgba(255, 249, 242, 0.9) 42%,
       rgba(255, 249, 242, 0.42) 100%
-    ),
-    url('@/assets/img/ning.jpg') center / cover;
+  ),
+  url('@/assets/img/ning.jpg') center / cover;
   z-index: -2;
 }
 
@@ -147,10 +146,9 @@ defineProps<{
   font-weight: 600;
   text-decoration: none;
   border-radius: 999px;
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    background-color 0.25s ease;
+  transition: transform 0.25s ease,
+  box-shadow 0.25s ease,
+  background-color 0.25s ease;
 }
 
 .btn-primary {
