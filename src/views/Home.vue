@@ -57,7 +57,7 @@ interface StatData {
 }
 
 const bookListStore = useBookListStore()
-const {bookList, totalBooks, categories, featuredBooks, popularTags, monthlyStats} =
+const {bookList, totalBooks, categories, featuredBooks, popularTags, monthlyStats, articleCount} =
     storeToRefs(bookListStore)
 
 const searchQuery = ref('')
@@ -137,11 +137,15 @@ onMounted(async () => {
   // 此时 totalBooks 已经是后端返回的真实数量了
   startAnimate()
 })
+// 计算精选书单
+const totalCategoryCount = computed(() => {
+  return categories.value.reduce((sum, item) => sum + item.count, 0)
+})
 
 const startAnimate = () => {
   animateNumber('bookCount', totalBooks.value)
-  animateNumber('articleCount', 92)
-  animateNumber('listCount', 30)
+  animateNumber('articleCount', articleCount.value)
+  animateNumber('listCount', totalCategoryCount.value)
 }
 
 onUnmounted(() => {

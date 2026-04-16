@@ -30,6 +30,7 @@ export const useBookListStore = defineStore('bookList', {
     }),
     getters: {
         totalBooks: (state) => state.bookList.length,
+        articleCount: (state) => state.bookList.filter(book => book.content.length > 0).length,
         latestReviews: (state) =>
             // 浅拷贝数组并按日期降序排序，确保原始数据不被修改
             // state.bookList 会将数组种的每个元素都取出来，放进一个新的数组
@@ -41,13 +42,22 @@ export const useBookListStore = defineStore('bookList', {
             return this.latestReviews.slice(0, 3)
         },
         categories: (state) => {
+            // reduce 是数组的归纳/累加的方法
+            //把一个数组"压缩"成一个值（这个值可以是数字、字符串、对象等任何类型）
+            // 初始值为0，如果是对象类型就为空对象 {}
+            // reduce((累加器, 当前元素)
+            // reduce 会自动遍历数组的每一个元素。
             const counts = state.bookList.reduce<Record<string, number>>((acc, book) => {
+                // ?? 是空值合并运算符：如果 acc[book.category] 是 undefined/null，就取 0
+                // { "科幻": 2, "文学": 2, "奇幻": 1 }
                 acc[book.category] = (acc[book.category] ?? 0) + 1
                 return acc
             }, {})
 
-            return Object.entries(counts)
+            return Object.entries(counts)// 先转成二维数组
+                // 再转成一维的数组对象
                 .map(([name, count]) => ({name, count}))
+                // 排序
                 .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'zh-CN'))
         },
         popularTags: (state) => {
