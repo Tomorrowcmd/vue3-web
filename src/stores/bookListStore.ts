@@ -5,10 +5,11 @@ import mountainCover from '@/assets/img/ning.jpg'
 import wcCover from '@/assets/img/wc.png'
 
 // 找到这一行，确保它长这样（加上 export 关键字）
-export type { BookCardItem, MonthlyReadingStats } from '@/types/book'
+export type {BookCardItem, MonthlyReadingStats} from '@/types/book'
 import type {BookCardItem, MonthlyReadingStats} from '@/types/book'
 import {getBookListApi} from '@/api/bookapi.ts'
 import {ca} from 'element-plus/es/locale/index.mjs'
+import {getMonthlyStatsApi} from "@/api/monthlyStatsApi.ts";
 
 const parseReadMinutes = (value: string) => {
     const matched = value.match(/\d+/)
@@ -21,13 +22,15 @@ export const useBookListStore = defineStore('bookList', {
     state: () => ({
         bookList: [] as BookCardItem[],
         monthlyStats: {
-            books: 0,
-            hours: 0,
-            reviews: 0,
+            statMonth: '',
+            booksCount: 0,
+            hoursCount: 0,
+            reviewsCount: 0,
         } as MonthlyReadingStats,
         loading: false,
         error: null as string | null,
     }),
+    persist: true, // 自动保存到 localStorage
     getters: {
         totalBooks: (state) => state.bookList.length,
         articleCount: (state) => state.bookList.filter(book => book.content.length > 0).length,
@@ -106,12 +109,12 @@ export const useBookListStore = defineStore('bookList', {
                 },
                 {
                     label: '阅读时长',
-                    value: `${state.monthlyStats.hours}h`,
+                    value: `${state.monthlyStats.hoursCount}h`,
                     hint: '本月累计沉浸时光',
                 },
                 {
                     label: '书评产出',
-                    value: `${state.monthlyStats.reviews}`,
+                    value: `${state.monthlyStats.reviewsCount}`,
                     hint: '本月完成书评篇数',
                 },
             ]
@@ -132,6 +135,7 @@ export const useBookListStore = defineStore('bookList', {
                 .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'zh-CN'))
         },
         reviewHighlights: (state) =>
+            // 浅拷贝数据
             [...state.bookList]
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map((book, index) => ({
@@ -155,6 +159,18 @@ export const useBookListStore = defineStore('bookList', {
                 // 所以这里直接赋值即可！
                 const data = await getBookListApi();
                 this.bookList = data;
+            } catch (err) {
+                console.error('请求失败:', err);
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async fetchMonthlyStats() {
+            this.loading = true;
+            try {
+                const data = await getMonthlyStatsApi();
+                this.monthlyStats = data;
             } catch (err) {
                 console.error('请求失败:', err);
             } finally {

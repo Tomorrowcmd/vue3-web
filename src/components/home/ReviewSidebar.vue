@@ -55,17 +55,17 @@
       <div class="stats-list">
         <div class="stat-row">
           <span>已读书籍</span>
-          <strong>{{ monthlyStats.books }}</strong>
+          <strong>{{ monthlyStats.booksCount }} 本</strong>
         </div>
 
         <div class="stat-row">
           <span>阅读时长</span>
-          <strong>{{ monthlyStats.hours }}h</strong>
+          <strong>{{ monthlyStats.hoursCount }}h</strong>
         </div>
 
         <div class="stat-row">
           <span>完成书评</span>
-          <strong>{{ monthlyStats.reviews }}</strong>
+          <strong>{{ monthlyStats.reviewsCount }}条</strong>
         </div>
       </div>
     </section>
@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MonthlyReadingStats } from '@/types/book'
+import type {MonthlyReadingStats} from '@/types/book'
 
 defineProps<{
   categories: Array<{ name: string; count: number }>

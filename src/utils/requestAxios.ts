@@ -1,4 +1,5 @@
 import axios from "axios";
+import type {ApiResponse} from "@/types/book.ts";
 
 const request = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -7,7 +8,7 @@ const request = axios.create({
 // 响应拦截器
 request.interceptors.response.use(
     (response) => {
-        const res = response.data; // 后端返回的 Request 对象
+        const res: ApiResponse<any> = response.data; // 后端返回的 Request 对象
 
         // 如果code不是200， 说明业务上有错误
         if (res.code !== 200) {

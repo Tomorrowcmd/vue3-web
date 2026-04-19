@@ -14,9 +14,10 @@ export interface BookCardItem {
 }
 
 export interface MonthlyReadingStats {
-    books: number
-    hours: number
-    reviews: number
+    statMonth: string
+    booksCount: number
+    hoursCount: number
+    reviewsCount: number
 }
 
 // API 统一响应结构

@@ -136,9 +136,12 @@ onMounted(async () => {
   // 2. 数据回来后，再执行动画
   // 此时 totalBooks 已经是后端返回的真实数量了
   startAnimate()
+
+  await bookListStore.fetchMonthlyStats()
 })
 // 计算精选书单
 const totalCategoryCount = computed(() => {
+  // 计算所有分类的数量之和
   return categories.value.reduce((sum, item) => sum + item.count, 0)
 })
 
